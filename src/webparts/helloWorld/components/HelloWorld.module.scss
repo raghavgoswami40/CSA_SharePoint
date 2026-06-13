@@ -1,0 +1,52 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+$xlyour-black:  #282928;
+$xlyour-white:  #E0E1E0;
+$xlyour-grey:   #7D7F7C;
+
+.helloWorld {
+  overflow: hidden;
+  padding: 20px;
+  background: #f4f4f4;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  &.teams {
+    font-family: $ms-font-family-fallbacks;
+  }
+}
+
+// Document library content area below the project selector
+.contentArea {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1.5px solid #e0e0e0;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.libraryPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px;
+  text-align: center;
+}
+
+.libraryIcon {
+  font-size: 48px;
+}
+
+.libraryText {
+  font-size: 18px;
+  font-weight: 700;
+  color: $xlyour-black;
+}
+
+.libraryHint {
+  font-size: 13px;
+  color: $xlyour-grey;
+}

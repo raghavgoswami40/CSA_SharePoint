@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "csa-site-client-side-solution",
+    "id": "1e398513-cb4e-4ac8-a1ee-59c7b0280798",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "CSA site description"
+      },
+      "longDescription": {
+        "default": "CSA site description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "csa-site Feature",
+        "description": "The feature that activates elements of the csa-site solution.",
+        "id": "10da1216-1ef5-4b57-bd11-376a42dd1472",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/csa-site.sppkg"
+  }
+}

@@ -1,0 +1,319 @@
+// XLYOUR Brand Colours
+$xlyour-black:  #282928;
+$xlyour-white:  #E0E1E0;
+$xlyour-grey:   #7D7F7C;
+$xlyour-red:    #BD0000;
+$xlyour-yellow: #FFC300;
+
+.selectorRoot {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: $xlyour-black;
+  border-radius: 16px;
+  padding: 0 0 4px 0;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  margin-bottom: 24px;
+}
+
+// ── Header ──────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid rgba($xlyour-white, 0.08);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: $xlyour-grey;
+  text-transform: uppercase;
+}
+
+.headerCount {
+  background: $xlyour-red;
+  color: $xlyour-white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 1px 8px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba($xlyour-yellow, 0.12);
+  border: 1.5px solid $xlyour-yellow;
+  color: $xlyour-yellow;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.03em;
+
+  &:hover {
+    background: $xlyour-yellow;
+    color: $xlyour-black;
+  }
+}
+
+.addIcon {
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 400;
+}
+
+// ── Add Form ─────────────────────────────────────────────
+.addFormWrapper {
+  background: rgba($xlyour-white, 0.04);
+  border-bottom: 1px solid rgba($xlyour-white, 0.08);
+  padding: 20px 24px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.formTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: $xlyour-white;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.formRow {
+  margin-bottom: 10px;
+}
+
+.formInput {
+  width: 100%;
+  background: rgba($xlyour-white, 0.06);
+  border: 1.5px solid rgba($xlyour-white, 0.15);
+  border-radius: 8px;
+  color: $xlyour-white;
+  font-size: 14px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+
+  &::placeholder { color: $xlyour-grey; }
+
+  &:focus {
+    border-color: $xlyour-yellow;
+    background: rgba($xlyour-yellow, 0.05);
+  }
+}
+
+.formActions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  background: $xlyour-red;
+  color: $xlyour-white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 22px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: lighten($xlyour-red, 8%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba($xlyour-red, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// ── Card Rail ─────────────────────────────────────────────
+.rail {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: $xlyour-grey transparent;
+
+  &::-webkit-scrollbar { height: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: $xlyour-grey; border-radius: 4px; }
+}
+
+// ── Project Card ──────────────────────────────────────────
+.card {
+  position: relative;
+  flex: 0 0 200px;
+  background: rgba($xlyour-white, 0.05);
+  border: 1.5px solid rgba($xlyour-white, 0.08);
+  border-radius: 12px;
+  padding: 0 0 14px 0;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  overflow: hidden;
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $xlyour-yellow;
+  }
+}
+
+.cardHovered {
+  background: rgba($xlyour-white, 0.09);
+  border-color: rgba($xlyour-white, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.cardSelected {
+  border-color: $xlyour-yellow !important;
+  background: rgba($xlyour-yellow, 0.07) !important;
+  box-shadow: 0 0 0 1px $xlyour-yellow, 0 8px 24px rgba($xlyour-yellow, 0.15);
+}
+
+.cardAccent {
+  height: 4px;
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+}
+
+.initials {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: $xlyour-white;
+  margin: 14px 14px 8px;
+  letter-spacing: 0.05em;
+}
+
+.cardBody {
+  padding: 0 14px;
+}
+
+.cardName {
+  font-size: 14px;
+  font-weight: 700;
+  color: $xlyour-white;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardDesc {
+  font-size: 11px;
+  color: $xlyour-grey;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.metaChip {
+  font-size: 10px;
+  color: $xlyour-grey;
+  background: rgba($xlyour-white, 0.07);
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.selectedBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: $xlyour-black;
+  font-weight: 800;
+}
+
+// ── Empty State ───────────────────────────────────────────
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  width: 100%;
+  gap: 6px;
+}
+
+.emptyIcon { font-size: 36px; }
+
+.emptyText {
+  font-size: 15px;
+  font-weight: 700;
+  color: $xlyour-white;
+}
+
+.emptySubText {
+  font-size: 12px;
+  color: $xlyour-grey;
+}
+
+// ── Active Bar ────────────────────────────────────────────
+.activeBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  background: rgba($xlyour-yellow, 0.08);
+  border-top: 1px solid rgba($xlyour-yellow, 0.2);
+}
+
+.activeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: $xlyour-yellow;
+  text-transform: uppercase;
+}
+
+.activeName {
+  font-size: 13px;
+  font-weight: 600;
+  color: $xlyour-white;
+}
