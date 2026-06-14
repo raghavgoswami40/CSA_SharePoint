@@ -18,11 +18,11 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
     "group": { "default": "Advanced" },
-    "title": { "default": "HelloWorld" },
-    "description": { "default": "HelloWorld description" },
-    "officeFabricIconFontName": "Page",
+    "title": { "default": "Projects" },
+    "description": { "default": "XLYOUR project selector and document library" },
+    "officeFabricIconFontName": "FabricFolder",
     "properties": {
-      "description": "HelloWorld"
+      "description": "Projects"
     }
   }]
 }

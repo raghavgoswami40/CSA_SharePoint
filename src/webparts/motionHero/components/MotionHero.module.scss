@@ -1,0 +1,19 @@
+// XLYOUR brand tokens
+$xlyour-black:  #282928;
+$xlyour-white:  #E0E1E0;
+$xlyour-red:    #BD0000;
+$xlyour-yellow: #FFC300;
+$xlyour-grey:   #7D7F7C;
+
+.root {
+  width: 100%;
+  aspect-ratio: 1200 / 420;
+  background: $xlyour-black;
+  border-radius: 0;        // flush edge-to-edge in full-bleed sections
+  overflow: hidden;
+  position: relative;
+
+  @media (max-width: 640px) {
+    aspect-ratio: 4 / 3;
+  }
+}

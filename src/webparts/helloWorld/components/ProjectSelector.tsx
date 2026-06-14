@@ -6,7 +6,7 @@ export interface IProjectSelectorProps {
   projects: IProject[];
   selectedProjectId: string | undefined;
   onProjectSelect: (project: IProject) => void;
-  onAddProject: () => void;
+  onAddProject: (name: string, description: string) => Promise<void>;
 }
 
 export interface IProjectSelectorState {
@@ -14,14 +14,16 @@ export interface IProjectSelectorState {
   showAddForm: boolean;
   newProjectName: string;
   newProjectDescription: string;
+  isCreating: boolean;
+  createError: string | undefined;
 }
 
 // XLYOUR brand colours cycled across project cards
 const PROJECT_COLOURS = [
-  '#BD0000', // XLYOUR Red
   '#FFC300', // XLYOUR Yellow
-  '#7D7F7C', // XLYOUR Grey
-  '#282928', // XLYOUR Black
+  '#FFC300',
+  '#FFC300',
+  '#FFC300',
 ];
 
 export default class ProjectSelector extends React.Component<IProjectSelectorProps, IProjectSelectorState> {
@@ -33,6 +35,8 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
       showAddForm: false,
       newProjectName: '',
       newProjectDescription: '',
+      isCreating: false,
+      createError: undefined,
     };
   }
 
@@ -45,17 +49,25 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
       .slice(0, 2);
   }
 
-  private _handleAddSubmit = (e: React.FormEvent): void => {
+  private _handleAddSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    if (this.state.newProjectName.trim()) {
-      this.props.onAddProject();
-      this.setState({ showAddForm: false, newProjectName: '', newProjectDescription: '' });
+    const name = this.state.newProjectName.trim();
+    const description = this.state.newProjectDescription.trim();
+    if (!name) return;
+
+    this.setState({ isCreating: true, createError: undefined });
+    try {
+      await this.props.onAddProject(name, description);
+      this.setState({ showAddForm: false, newProjectName: '', newProjectDescription: '', isCreating: false });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to create project.';
+      this.setState({ isCreating: false, createError: msg });
     }
   }
 
   public render(): React.ReactElement<IProjectSelectorProps> {
     const { projects, selectedProjectId, onProjectSelect } = this.props;
-    const { hoveredId, showAddForm, newProjectName, newProjectDescription } = this.state;
+    const { hoveredId, showAddForm, newProjectName, newProjectDescription, isCreating, createError } = this.state;
 
     return (
       <div className={styles.selectorRoot}>
@@ -101,9 +113,12 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
                   onChange={e => this.setState({ newProjectDescription: e.target.value })}
                 />
               </div>
+              {createError && (
+                <div className={styles.formError}>{createError}</div>
+              )}
               <div className={styles.formActions}>
-                <button type="submit" className={styles.submitButton} disabled={!newProjectName.trim()}>
-                  Create Project
+                <button type="submit" className={styles.submitButton} disabled={!newProjectName.trim() || isCreating}>
+                  {isCreating ? 'Creating…' : 'Create Project'}
                 </button>
               </div>
             </form>
@@ -172,8 +187,18 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
           {projects.length === 0 && !showAddForm && (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>📁</div>
-              <div className={styles.emptyText}>No projects yet</div>
-              <div className={styles.emptySubText}>Click "New Project" to get started</div>
+              <div className={styles.emptyText}>You have not added any projects.</div>
+              <div className={styles.emptySubText}>
+                <span
+                  className={styles.emptyLink}
+                  onClick={() => this.setState({ showAddForm: true })}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === 'Enter' && this.setState({ showAddForm: true })}
+                >
+                  Add a project now
+                </span>
+              </div>
             </div>
           )}
         </div>

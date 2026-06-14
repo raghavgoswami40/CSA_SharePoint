@@ -50,3 +50,21 @@ $xlyour-grey:   #7D7F7C;
   font-size: 13px;
   color: $xlyour-grey;
 }
+
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  font-size: 14px;
+  color: $xlyour-grey;
+}
+
+.errorState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  font-size: 14px;
+  color: #BD0000;
+}

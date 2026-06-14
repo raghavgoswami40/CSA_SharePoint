@@ -1,3 +1,5 @@
+import { SPHttpClient } from '@microsoft/sp-http';
+
 export interface IProject {
   id: string;
   name: string;
@@ -13,4 +15,6 @@ export interface IHelloWorldProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
+  spHttpClient: SPHttpClient;
+  webUrl: string;
 }

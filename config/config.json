@@ -9,6 +9,14 @@
           "manifest": "./src/webparts/helloWorld/HelloWorldWebPart.manifest.json"
         }
       ]
+    },
+    "motion-hero-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/motionHero/MotionHeroWebPart.js",
+          "manifest": "./src/webparts/motionHero/MotionHeroWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
