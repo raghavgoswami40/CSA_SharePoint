@@ -4,8 +4,8 @@
  * Timeline (30 fps):
  *   0  – 36f   Logo fades + scales in, centred
  *   36 – 66f   Logo holds
- *   66 – 81f   Flip OUT — logo scaleX 1 → 0  (squishes away)
- *   81 – 96f   Flip IN  — text scaleX 0 → 1  (expands in)
+ *   66 – 81f   Flip OUT — logo scaleX 1 → 0
+ *   81 – 96f   Flip IN  — text scaleX 0 → 1
  *   96f+        Text holds; loops at 8 s
  */
 
@@ -49,13 +49,12 @@ function fadeIn(frame: number, start: number, dur: number): number {
 
 // ── Timeline ──────────────────────────────────────────────────────────────────
 
-const LOGO_IN      = 0;
-const LOGO_DUR     = 36;
-const LOGO_HOLD    = 30;
+const LOGO_IN        = 0;
+const LOGO_DUR       = 36;
+const LOGO_HOLD      = 30;
 const FLIP_OUT_START = LOGO_IN + LOGO_DUR + LOGO_HOLD;  // 66
 const FLIP_OUT_END   = FLIP_OUT_START + 15;              // 81
-const FLIP_IN_START  = FLIP_OUT_END;                     // 81
-const FLIP_IN_END    = FLIP_IN_START + 15;               // 96
+const FLIP_IN_END    = FLIP_OUT_END + 15;                // 96
 
 // ── Logo asset ────────────────────────────────────────────────────────────────
 
@@ -67,35 +66,29 @@ const logoSrc: string = require('../assets/logo-white.png');
 export const WelcomeComposition: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Background
   const bgOpacity = interpolate(frame, [0, LOGO_DUR], [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: easeOut,
   });
 
-  // Logo entrance
   const logoOpacity = fadeIn(frame, LOGO_IN, LOGO_DUR);
   const logoScale   = interpolate(frame, [LOGO_IN, LOGO_IN + LOGO_DUR], [0.82, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: easeOvershoot,
   });
 
-  // Flip OUT — logo scaleX 1 → 0
   const logoScaleX = interpolate(frame, [FLIP_OUT_START, FLIP_OUT_END], [1, 0], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: easeInOut,
   });
 
-  // Flip IN — text scaleX 0 → 1
-  const textScaleX = interpolate(frame, [FLIP_IN_START, FLIP_IN_END], [0, 1], {
+  const textScaleX = interpolate(frame, [FLIP_OUT_END, FLIP_IN_END], [0, 1], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: easeInOut,
   });
 
-  // Which face to show
-  const showLogo = frame < FLIP_IN_START;
-  const showText = frame >= FLIP_OUT_END;
-
-  // Glow fades during flip-out
   const glowOpacity = interpolate(frame, [FLIP_OUT_START, FLIP_OUT_END], [1, 0], {
     extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
   });
+
+  const showLogo = frame < FLIP_IN_END;
+  const showText = frame >= FLIP_OUT_END;
 
   return (
     <div style={{
@@ -123,7 +116,7 @@ export const WelcomeComposition: React.FC = () => {
         transform: 'translate(-50%, -50%)',
       }} />
 
-      {/* ── LOGO face ── */}
+      {/* Logo */}
       {showLogo && (
         <div style={{
           position: 'absolute',
@@ -131,14 +124,14 @@ export const WelcomeComposition: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
           opacity: logoOpacity,
-          transform: `scale(${logoScale}) scaleX(${logoScaleX})`,
+          transform: `scale(${logoScale}) scaleX(${frame >= FLIP_OUT_START ? logoScaleX : 1})`,
           transformOrigin: 'center center',
         }}>
           <img src={logoSrc} alt="XLYOUR" style={{ width: 280, display: 'block' }} />
         </div>
       )}
 
-      {/* ── TEXT face ── */}
+      {/* Text */}
       {showText && (
         <div style={{
           position: 'absolute',

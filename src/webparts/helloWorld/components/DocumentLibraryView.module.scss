@@ -1,0 +1,301 @@
+$xlyour-black:  #282928;
+$xlyour-white:  #E0E1E0;
+$xlyour-grey:   #7D7F7C;
+$xlyour-yellow: #FFC300;
+$xlyour-red:    #BD0000;
+
+.root {
+  width: 100%;
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────────────────────
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+  background: rgba($xlyour-white, 0.04);
+  border-bottom: 1px solid rgba($xlyour-white, 0.08);
+  gap: 8px;
+}
+
+.breadcrumbPath {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+// ── Toolbar ───────────────────────────────────────────────────────────────────
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.toolbarBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba($xlyour-white, 0.06);
+  border: 1px solid rgba($xlyour-white, 0.15);
+  border-radius: 6px;
+  color: $xlyour-white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover:not(:disabled) {
+    background: rgba($xlyour-white, 0.12);
+    border-color: rgba($xlyour-white, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.toolbarBtnPrimary {
+  background: rgba($xlyour-yellow, 0.12);
+  border-color: $xlyour-yellow;
+  color: $xlyour-yellow;
+
+  &:hover:not(:disabled) {
+    background: $xlyour-yellow;
+    color: $xlyour-black;
+  }
+}
+
+// ── New folder form ───────────────────────────────────────────────────────────
+
+.newFolderForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba($xlyour-white, 0.03);
+  border-bottom: 1px solid rgba($xlyour-white, 0.06);
+  flex-wrap: wrap;
+}
+
+.newFolderIcon {
+  font-size: 18px;
+}
+
+.newFolderInput {
+  flex: 1;
+  min-width: 160px;
+  background: rgba($xlyour-white, 0.06);
+  border: 1.5px solid rgba($xlyour-white, 0.15);
+  border-radius: 6px;
+  color: $xlyour-white;
+  font-size: 13px;
+  padding: 6px 12px;
+  outline: none;
+
+  &::placeholder { color: $xlyour-grey; }
+
+  &:focus { border-color: $xlyour-yellow; }
+}
+
+.newFolderSubmit {
+  background: $xlyour-yellow;
+  color: $xlyour-black;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:hover:not(:disabled) { opacity: 0.85; }
+}
+
+.newFolderCancel {
+  background: transparent;
+  border: 1px solid rgba($xlyour-white, 0.2);
+  border-radius: 6px;
+  color: $xlyour-grey;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover { border-color: rgba($xlyour-white, 0.4); color: $xlyour-white; }
+}
+
+.inlineError {
+  font-size: 12px;
+  color: $xlyour-red;
+  width: 100%;
+}
+
+.uploadError {
+  padding: 8px 20px;
+  font-size: 12px;
+  color: $xlyour-red;
+  background: rgba($xlyour-red, 0.08);
+  border-bottom: 1px solid rgba($xlyour-red, 0.2);
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.breadcrumbSep {
+  color: $xlyour-grey;
+  font-size: 14px;
+  padding: 0 4px;
+}
+
+.breadcrumbLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: $xlyour-yellow;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover { opacity: 0.8; }
+}
+
+.breadcrumbCurrent {
+  font-size: 13px;
+  font-weight: 600;
+  color: $xlyour-black;
+}
+
+// ── State messages ────────────────────────────────────────────────────────────
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  gap: 10px;
+  font-size: 14px;
+  color: $xlyour-grey;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 36px;
+}
+
+.stateError {
+  padding: 20px 24px;
+  font-size: 13px;
+  color: $xlyour-red;
+  background: rgba($xlyour-red, 0.06);
+}
+
+// ── Table ─────────────────────────────────────────────────────────────────────
+
+.table {
+  width: 100%;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 120px 80px;
+  padding: 10px 20px;
+  background: rgba($xlyour-white, 0.06);
+  border-bottom: 1px solid rgba($xlyour-white, 0.08);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $xlyour-grey;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 120px 80px;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba($xlyour-white, 0.06);
+  align-items: center;
+  transition: background 0.15s;
+
+  &:last-child { border-bottom: none; }
+
+  &:hover {
+    background: rgba($xlyour-white, 0.04);
+  }
+}
+
+.tableRowFolder {
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($xlyour-yellow, 0.05);
+  }
+}
+
+.colName {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.colMeta {
+  font-size: 12px;
+  color: $xlyour-grey;
+}
+
+.colSize {
+  font-size: 12px;
+  color: $xlyour-grey;
+  text-align: right;
+}
+
+.itemIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.itemName {
+  font-size: 14px;
+  font-weight: 500;
+  color: $xlyour-white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemCount {
+  font-size: 11px;
+  color: $xlyour-white;
+  background: $xlyour-grey;
+  border-radius: 10px;
+  padding: 1px 7px;
+  flex-shrink: 0;
+}
+
+.fileLink {
+  font-size: 14px;
+  font-weight: 500;
+  color: $xlyour-white;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: $xlyour-yellow;
+    text-decoration: underline;
+  }
+}

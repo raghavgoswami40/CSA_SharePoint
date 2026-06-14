@@ -1,78 +1,97 @@
 import * as React from 'react';
-import { IProject } from './IHelloWorldProps';
+import { IProject, ISiteSearchResult } from './IHelloWorldProps';
 import styles from './ProjectSelector.module.scss';
 
 export interface IProjectSelectorProps {
   projects: IProject[];
   selectedProjectId: string | undefined;
   onProjectSelect: (project: IProject) => void;
-  onAddProject: (name: string, description: string) => Promise<void>;
+  onAddProject: (siteTitle: string, siteUrl: string) => Promise<void>;
+  onSearchSites: (query: string) => Promise<ISiteSearchResult[]>;
 }
 
-export interface IProjectSelectorState {
+interface IProjectSelectorState {
   hoveredId: string | undefined;
   showAddForm: boolean;
-  newProjectName: string;
-  newProjectDescription: string;
+  searchQuery: string;
+  searchResults: ISiteSearchResult[];
+  isSearching: boolean;
+  selectedSite: ISiteSearchResult | undefined;
   isCreating: boolean;
   createError: string | undefined;
 }
 
-// XLYOUR brand colours cycled across project cards
-const PROJECT_COLOURS = [
-  '#FFC300', // XLYOUR Yellow
-  '#FFC300',
-  '#FFC300',
-  '#FFC300',
-];
+const PROJECT_COLOURS = ['#FFC300', '#FFC300', '#FFC300', '#FFC300'];
 
 export default class ProjectSelector extends React.Component<IProjectSelectorProps, IProjectSelectorState> {
+
+  private _searchTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(props: IProjectSelectorProps) {
     super(props);
     this.state = {
       hoveredId: undefined,
       showAddForm: false,
-      newProjectName: '',
-      newProjectDescription: '',
+      searchQuery: '',
+      searchResults: [],
+      isSearching: false,
+      selectedSite: undefined,
       isCreating: false,
       createError: undefined,
     };
   }
 
   private _getInitials(name: string): string {
-    return name
-      .split(' ')
-      .map(w => w[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  }
+
+  private _handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const query = e.target.value;
+    this.setState({ searchQuery: query, selectedSite: undefined, searchResults: [] });
+
+    if (this._searchTimer) clearTimeout(this._searchTimer);
+    if (!query.trim()) return;
+
+    this.setState({ isSearching: true });
+    this._searchTimer = setTimeout(async () => {
+      const results = await this.props.onSearchSites(query);
+      this.setState({ searchResults: results, isSearching: false });
+    }, 350); // debounce
+  }
+
+  private _handleSiteSelect = (site: ISiteSearchResult): void => {
+    this.setState({ selectedSite: site, searchQuery: site.title, searchResults: [] });
   }
 
   private _handleAddSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    const name = this.state.newProjectName.trim();
-    const description = this.state.newProjectDescription.trim();
-    if (!name) return;
+    const { selectedSite } = this.state;
+    if (!selectedSite) return;
 
     this.setState({ isCreating: true, createError: undefined });
     try {
-      await this.props.onAddProject(name, description);
-      this.setState({ showAddForm: false, newProjectName: '', newProjectDescription: '', isCreating: false });
+      await this.props.onAddProject(selectedSite.title, selectedSite.url);
+      this.setState({
+        showAddForm: false, searchQuery: '', searchResults: [],
+        selectedSite: undefined, isCreating: false,
+      });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Failed to create project.';
+      const msg = err instanceof Error ? err.message : 'Failed to add project.';
       this.setState({ isCreating: false, createError: msg });
     }
   }
 
   public render(): React.ReactElement<IProjectSelectorProps> {
     const { projects, selectedProjectId, onProjectSelect } = this.props;
-    const { hoveredId, showAddForm, newProjectName, newProjectDescription, isCreating, createError } = this.state;
+    const {
+      hoveredId, showAddForm, searchQuery, searchResults,
+      isSearching, selectedSite, isCreating, createError,
+    } = this.state;
 
     return (
       <div className={styles.selectorRoot}>
 
-        {/* Header bar */}
+        {/* Header */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <span className={styles.headerLabel}>PROJECTS</span>
@@ -80,57 +99,86 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
           </div>
           <button
             className={styles.addButton}
-            onClick={() => this.setState({ showAddForm: !showAddForm })}
-            title="Add new project"
+            onClick={() => this.setState({ showAddForm: !showAddForm, searchQuery: '', searchResults: [], selectedSite: undefined, createError: undefined })}
+            title="Link a project site"
           >
             <span className={styles.addIcon}>{showAddForm ? '✕' : '+'}</span>
-            <span>{showAddForm ? 'Cancel' : 'New Project'}</span>
+            <span>{showAddForm ? 'Cancel' : 'Add Project'}</span>
           </button>
         </div>
 
-        {/* Add Project inline form */}
+        {/* Add form — site search picker */}
         {showAddForm && (
           <div className={styles.addFormWrapper}>
             <form className={styles.addForm} onSubmit={this._handleAddSubmit}>
-              <div className={styles.formTitle}>Create a New Project</div>
-              <div className={styles.formRow}>
+              <div className={styles.formTitle}>Link a SharePoint Site</div>
+              <div className={styles.formRow} style={{ position: 'relative' }}>
                 <input
                   className={styles.formInput}
                   type="text"
-                  placeholder="Project name *"
-                  value={newProjectName}
-                  onChange={e => this.setState({ newProjectName: e.target.value })}
+                  placeholder="Search for a SharePoint site…"
+                  value={searchQuery}
+                  onChange={this._handleSearchChange}
                   autoFocus
-                  required
+                  autoComplete="off"
                 />
+                {isSearching && (
+                  <div className={styles.searchSpinner}>⟳</div>
+                )}
+                {/* Search results dropdown */}
+                {searchResults.length > 0 && (
+                  <div className={styles.searchDropdown}>
+                    {searchResults.map((site, i) => (
+                      <div
+                        key={i}
+                        className={styles.searchResult}
+                        onClick={() => this._handleSiteSelect(site)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={e => e.key === 'Enter' && this._handleSiteSelect(site)}
+                      >
+                        <div className={styles.searchResultTitle}>{site.title}</div>
+                        <div className={styles.searchResultUrl}>{site.url}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div className={styles.formRow}>
-                <input
-                  className={styles.formInput}
-                  type="text"
-                  placeholder="Short description (optional)"
-                  value={newProjectDescription}
-                  onChange={e => this.setState({ newProjectDescription: e.target.value })}
-                />
-              </div>
+
+              {/* Selected site confirmation */}
+              {selectedSite && (
+                <div className={styles.selectedSite}>
+                  <span className={styles.selectedSiteCheck}>✓</span>
+                  <div>
+                    <div className={styles.selectedSiteTitle}>{selectedSite.title}</div>
+                    <div className={styles.selectedSiteUrl}>{selectedSite.url}</div>
+                  </div>
+                </div>
+              )}
+
               {createError && (
                 <div className={styles.formError}>{createError}</div>
               )}
+
               <div className={styles.formActions}>
-                <button type="submit" className={styles.submitButton} disabled={!newProjectName.trim() || isCreating}>
-                  {isCreating ? 'Creating…' : 'Create Project'}
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={!selectedSite || isCreating}
+                >
+                  {isCreating ? 'Adding…' : 'Add Project'}
                 </button>
               </div>
             </form>
           </div>
         )}
 
-        {/* Project cards scroll rail */}
+        {/* Project cards */}
         <div className={styles.rail}>
           {projects.map((project, index) => {
             const isSelected = project.id === selectedProjectId;
-            const isHovered = project.id === hoveredId;
-            const colour = project.colour || PROJECT_COLOURS[index % PROJECT_COLOURS.length];
+            const isHovered  = project.id === hoveredId;
+            const colour     = project.colour || PROJECT_COLOURS[index % PROJECT_COLOURS.length];
 
             return (
               <div
@@ -145,45 +193,28 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
                 aria-pressed={isSelected}
                 aria-label={`Select project ${project.name}`}
               >
-                {/* Colour accent bar */}
                 <div className={styles.cardAccent} style={{ background: colour }} />
-
-                {/* Initials badge */}
                 <div className={styles.initials} style={{ background: colour }}>
                   {this._getInitials(project.name)}
                 </div>
-
-                {/* Card body */}
                 <div className={styles.cardBody}>
                   <div className={styles.cardName}>{project.name}</div>
                   {project.description && (
                     <div className={styles.cardDesc}>{project.description}</div>
                   )}
-                  <div className={styles.cardMeta}>
-                    {project.documentCount !== undefined && (
-                      <span className={styles.metaChip}>
-                        📄 {project.documentCount} docs
-                      </span>
-                    )}
-                    {project.lastModified && (
-                      <span className={styles.metaChip}>
-                        🕐 {project.lastModified}
-                      </span>
-                    )}
-                  </div>
+                  {project.lastModified && (
+                    <div className={styles.cardMeta}>
+                      <span className={styles.metaChip}>🕐 {project.lastModified}</span>
+                    </div>
+                  )}
                 </div>
-
-                {/* Selected indicator */}
                 {isSelected && (
-                  <div className={styles.selectedBadge} style={{ background: colour }}>
-                    ✓
-                  </div>
+                  <div className={styles.selectedBadge} style={{ background: colour }}>✓</div>
                 )}
               </div>
             );
           })}
 
-          {/* Empty state */}
           {projects.length === 0 && !showAddForm && (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>📁</div>
@@ -203,7 +234,6 @@ export default class ProjectSelector extends React.Component<IProjectSelectorPro
           )}
         </div>
 
-        {/* Selected project name indicator */}
         {selectedProjectId && (
           <div className={styles.activeBar}>
             <span className={styles.activeLabel}>ACTIVE PROJECT</span>

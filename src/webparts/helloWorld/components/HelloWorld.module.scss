@@ -7,7 +7,7 @@ $xlyour-grey:   #7D7F7C;
 .helloWorld {
   overflow: hidden;
   padding: 20px;
-  background: #f4f4f4;
+  background: $xlyour-black;
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
@@ -18,13 +18,14 @@ $xlyour-grey:   #7D7F7C;
 
 // Document library content area below the project selector
 .contentArea {
-  background: #ffffff;
+  background: rgba($xlyour-white, 0.04);
   border-radius: 12px;
-  border: 1.5px solid #e0e0e0;
+  border: 1.5px solid rgba($xlyour-white, 0.08);
   min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .libraryPlaceholder {
@@ -43,7 +44,7 @@ $xlyour-grey:   #7D7F7C;
 .libraryText {
   font-size: 18px;
   font-weight: 700;
-  color: $xlyour-black;
+  color: $xlyour-white;
 }
 
 .libraryHint {

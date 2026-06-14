@@ -3,10 +3,15 @@ import { SPHttpClient } from '@microsoft/sp-http';
 export interface IProject {
   id: string;
   name: string;
+  siteUrl: string;
   description?: string;
   colour: string;
-  documentCount?: number;
   lastModified?: string;
+}
+
+export interface ISiteSearchResult {
+  title: string;
+  url: string;
 }
 
 export interface IHelloWorldProps {
