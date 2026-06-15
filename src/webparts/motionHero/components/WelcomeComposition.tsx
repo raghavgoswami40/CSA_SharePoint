@@ -94,7 +94,7 @@ export const WelcomeComposition: React.FC = () => {
     <div style={{
       width: '100%',
       height: '100%',
-      background: `rgba(40,41,40,${bgOpacity})`,
+      background: `rgba(0,0,0,${bgOpacity * 0.5})`,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

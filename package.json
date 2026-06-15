@@ -21,8 +21,10 @@
     "@microsoft/sp-office-ui-fabric-core": "1.20.0",
     "@microsoft/sp-property-pane": "1.20.0",
     "@microsoft/sp-webpart-base": "1.20.0",
+    "lucide-react": "^1.18.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "three": "^0.184.0",
     "tslib": "2.3.1"
   },
   "devDependencies": {
